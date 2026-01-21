@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  get "pages/home"
-  get "up" => "rails/health#show", as: :rails_health_check
   root "pages#home"
+  get "about", to: "pages#about"
 
   # get "top_10", to: "pages#top_10"
   # get "trending", to: "pages#trending"
