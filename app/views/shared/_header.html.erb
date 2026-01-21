@@ -1,20 +1,20 @@
 <header class="bg-black text-white">
   <div class="flex items-center justify-between px-6 py-4">
     
-    <p class="text-xl font-bold">CINERATE</p>
+    <%= link_to "CINERATE", root_path, class: "text-xl font-bold hover:text-pink-300 transition" %>
 
    
     <nav class="flex gap-15">
-      <%= link_to "HOME", root_path, class: "hover:text-red-300 transition" %>
-      <%= link_to "TOP 10", "#", class: "hover:text-red-300 transition" %>
-      <%= link_to "TRENDING", "#", class: "hover:text-red-300 transition" %>
-      <%= link_to "WHAT TO WATCH", "#", class: "hover:text-red-300 transition" %>
-      <%= link_to "ABOUT", about_path, class: "hover:text-red-300 transition" %>
+      <%= link_to "HOME", root_path, class: "hover:text-pink-300 transition" %>
+      <%= link_to "TOP 10", "#", class: "hover:text-pink-300 transition" %>
+      <%= link_to "TRENDING", "#", class: "hover:text-pink-300 transition" %>
+      <%= link_to "WHAT TO WATCH", "#", class: "hover:text-pink-300 transition" %>
+      <%= link_to "ABOUT", about_path, class: "hover:text-pink-300 transition" %>
     </nav>
 
     
-    <p class="cursor-pointer hover:text-red-300 transition">
-      Sign up
+    <p class="cursor-pointer hover:text-pink-300 transition">
+      <%= link_to "Sign up", new_user_registration_path, class: "hover:text-pink-300 transition" %>
     </p>
   </div>
 </header>
