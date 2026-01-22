@@ -1,3 +1,21 @@
-<footer class="bg-black border-t py-6 text-center text-sm text-white">
-  <p>© <%= Time.current.year %> CineRate</p>
+<div class="relative w-full overflow-hidden leading-[0] bg-transparent mt-10">
+  <svg 
+    viewBox="0 0 390 20" 
+    xmlns="http://www.w3.org/2000/svg" 
+    class="relative block w-full h-[20px] md:h-[40px] text-black fill-current"
+    preserveAspectRatio="none"
+  >
+    <path d="M0 20 C 100 0, 290 0, 390 20 L 390 20 L 0 20 Z"></path>
+  </svg>
+</div>
+
+<footer class="bg-black py-8 text-center text-sm text-white">
+  <div class="max-w-7xl mx-auto px-6 ">
+    <div class="flex justify-center space-x-6 mb-4">
+       <%= link_to "Privacy Policy", "#", class: "hover:text-yellow-200 transition" %>
+       <%= link_to "Terms of Service", "#", class: "hover:text-yellow-200 transition" %>
+       <%= link_to "Contact", "#", class: "hover:text-yellow-200 transition" %>
+    </div>
+    <p class="text-gray-400">© <%= Time.current.year %> <span class="font-['Anton'] tracking-wider text-white ml-1">CINERATE</span></p>
+  </div>
 </footer>

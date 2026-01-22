@@ -1,20 +1,74 @@
 <header class="bg-black text-white">
-  <div class="flex items-center justify-between px-6 py-4">
-    
-    <%= link_to "CINERATE", root_path, class: "text-xl font-bold hover:text-pink-300 transition" %>
+  <div class="max-w-7xl mx-auto px-6 py-4 space-y-4">
 
-   
-    <nav class="flex gap-15">
-      <%= link_to "HOME", root_path, class: "hover:text-pink-300 transition" %>
-      <%= link_to "TOP 10", "#", class: "hover:text-pink-300 transition" %>
-      <%= link_to "TRENDING", "#", class: "hover:text-pink-300 transition" %>
-      <%= link_to "WHAT TO WATCH", "#", class: "hover:text-pink-300 transition" %>
-      <%= link_to "ABOUT", about_path, class: "hover:text-pink-300 transition" %>
+    <div class="grid grid-cols-3 items-center">
+      <div></div>
+
+      <div class="flex justify-center">
+        <%= link_to "CINERATE",
+            root_path,
+            class: "text-6xl md:text-7xl lg:text-7xl
+                    font-['Anton'] uppercase tracking-wide
+                    hover:text-red-300 transition" %>
+      </div>
+
+      <div class="flex justify-end items-center gap-4">
+        <% if user_signed_in? %>
+          <%= link_to destroy_user_session_path,
+                      data: { turbo_method: :delete },
+                      class: "group relative inline-flex items-center justify-center p-0.5
+                              overflow-hidden text-xs font-medium rounded-xl
+                              bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
+            <span class="relative px-4 py-2 rounded-xl bg-white text-gray-900
+                         transition group-hover:bg-transparent">
+              Sign out
+            </span>
+          <% end %>
+        <% else %>
+          <%= link_to new_user_registration_path,
+                      class: "group relative inline-flex items-center justify-center p-0.5
+                              overflow-hidden text-xs font-medium rounded-xl
+                              bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
+            <span class="relative px-4 py-2 rounded-xl text-gray-900
+                         <%= current_page?(new_user_registration_path) ?
+                             'bg-transparent' :
+                             'bg-white group-hover:bg-transparent' %>">
+              Sign up
+            </span>
+          <% end %>
+
+          <%= link_to new_user_session_path,
+                      class: "group relative inline-flex items-center justify-center p-0.5
+                              overflow-hidden text-xs font-medium rounded-xl
+                              bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
+            <span class="relative px-4 py-2 rounded-xl text-gray-900
+                         <%= current_page?(new_user_session_path) ?
+                             'bg-transparent' :
+                             'bg-white group-hover:bg-transparent' %>">
+              Sign in
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    
+    <nav class="flex flex-wrap justify-center gap-x-10 gap-y-2 text-sm">
+      <%= link_to "HOME", root_path, class: "hover:text-yellow-200 transition whitespace-nowrap" %>
+      <%= link_to "TOP 10", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
+      <%= link_to "TRENDING", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
+      <%= link_to "WHAT TO WATCH", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
+      <%= link_to "ABOUT", about_path, class: "hover:text-yellow-200 transition whitespace-nowrap" %>
     </nav>
-
-    
-    <p class="cursor-pointer hover:text-pink-300 transition">
-      <%= link_to "Sign up", new_user_registration_path, class: "hover:text-pink-300 transition" %>
-    </p>
   </div>
 </header>
+
+<div class="relative w-full overflow-hidden leading-[0] bg-transparent">
+  <svg 
+    viewBox="0 0 390 20" 
+    xmlns="http://www.w3.org/2000/svg" 
+    class="relative block w-full h-[20px] md:h-[40px] text-black fill-current"
+    preserveAspectRatio="none"
+  >
+    <path d="M0 0 C 100 20, 290 20, 390 0 L 390 0 L 0 0 Z"></path>
+  </svg>
+</div>
