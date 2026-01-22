@@ -14,14 +14,17 @@
 
       <div class="flex justify-end items-center gap-4">
         <% if user_signed_in? %>
+          <span class="hidden md:inline text-xs font-medium text-gray-400">
+            <%= current_user.email %>
+          </span>
+
           <%= link_to destroy_user_session_path,
                       data: { turbo_method: :delete },
                       class: "group relative inline-flex items-center justify-center p-0.5
                               overflow-hidden text-xs font-medium rounded-xl
                               bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
-            <span class="relative px-4 py-2 rounded-xl bg-white text-gray-900
-                         transition group-hover:bg-transparent">
-              Sign out
+            <span class="relative px-4 py-2 rounded-xl bg-white text-gray-900 transition group-hover:bg-transparent">
+              Log out
             </span>
           <% end %>
         <% else %>
@@ -29,30 +32,16 @@
                       class: "group relative inline-flex items-center justify-center p-0.5
                               overflow-hidden text-xs font-medium rounded-xl
                               bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
-            <span class="relative px-4 py-2 rounded-xl text-gray-900
-                         <%= current_page?(new_user_registration_path) ?
-                             'bg-transparent' :
-                             'bg-white group-hover:bg-transparent' %>">
-              Sign up
-            </span>
-          <% end %>
-
-          <%= link_to new_user_session_path,
-                      class: "group relative inline-flex items-center justify-center p-0.5
-                              overflow-hidden text-xs font-medium rounded-xl
-                              bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
-            <span class="relative px-4 py-2 rounded-xl text-gray-900
-                         <%= current_page?(new_user_session_path) ?
-                             'bg-transparent' :
-                             'bg-white group-hover:bg-transparent' %>">
-              Sign in
+            <span class="relative px-5 py-2 rounded-xl bg-white text-gray-900 transition group-hover:bg-transparent">
+              Get started
             </span>
           <% end %>
         <% end %>
       </div>
+
     </div>
     
-    <nav class="flex flex-wrap justify-center gap-x-10 gap-y-2 text-sm">
+    <nav class="flex flex-wrap justify-center gap-x-10 gap-y-2 text-sm font-medium tracking-widest">
       <%= link_to "HOME", root_path, class: "hover:text-yellow-200 transition whitespace-nowrap" %>
       <%= link_to "TOP 10", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
       <%= link_to "TRENDING", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
