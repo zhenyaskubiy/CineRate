@@ -22,7 +22,7 @@
                       data: { turbo_method: :delete },
                       class: "group relative inline-flex items-center justify-center p-0.5
                               overflow-hidden text-xs font-medium rounded-xl
-                              bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
+                              bg-gradient-to-br from-red-100 to-red-200" do %>
             <span class="relative px-4 py-2 rounded-xl bg-white text-gray-900 transition group-hover:bg-transparent">
               Log out
             </span>
@@ -31,7 +31,7 @@
           <%= link_to new_user_registration_path,
                       class: "group relative inline-flex items-center justify-center p-0.5
                               overflow-hidden text-xs font-medium rounded-xl
-                              bg-gradient-to-br from-red-200 via-red-300 to-yellow-200" do %>
+                              bg-gradient-to-br from-red-100 to-red-200" do %>
             <span class="relative px-5 py-2 rounded-xl bg-white text-gray-900 transition group-hover:bg-transparent">
               Get started
             </span>
@@ -41,21 +41,21 @@
 
     </div>
     
-    <nav class="flex flex-wrap justify-center gap-x-10 gap-y-2 text-sm font-medium tracking-widest">
-      <%= link_to "HOME", root_path, class: "hover:text-yellow-200 transition whitespace-nowrap" %>
-      <%= link_to "TOP 10", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
-      <%= link_to "TRENDING", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
-      <%= link_to "WHAT TO WATCH", "#", class: "hover:text-yellow-200 transition whitespace-nowrap" %>
-      <%= link_to "ABOUT", about_path, class: "hover:text-yellow-200 transition whitespace-nowrap" %>
+    <nav class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[11px] font-bold tracking-[0.2em]">
+      <%= link_to "HOME", root_path, class: "nav-link-animated text-white hover:text-white-100 transition whitespace-nowrap uppercase" %>
+      <%= link_to "TOP 10", "#", class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
+      <%= link_to "TRENDING", "#", class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
+      <%= link_to "WHAT TO WATCH", "#", class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
+      <%= link_to "ABOUT", about_path, class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
     </nav>
   </div>
 </header>
 
-<div class="relative w-full overflow-hidden leading-[0] bg-transparent">
+<div class="relative w-full overflow-hidden leading-0 bg-transparent">
   <svg 
     viewBox="0 0 390 20" 
     xmlns="http://www.w3.org/2000/svg" 
-    class="relative block w-full h-[20px] md:h-[40px] text-black fill-current"
+    class="relative block w-full h-5 md:h-10 text-black fill-current"
     preserveAspectRatio="none"
   >
     <path d="M0 0 C 100 20, 290 20, 390 0 L 390 0 L 0 0 Z"></path>

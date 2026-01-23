@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+@layer components {
+  .nav-link-animated {
+    position: relative;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .nav-link-animated::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: white;
+    transition: all 0.2s ease-in-out;
+    border-radius: 2px;
+  }
+
+  .nav-link-animated:hover::before {
+    width: 100%;
+  }
+}
