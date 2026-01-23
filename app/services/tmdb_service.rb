@@ -1,11 +1,25 @@
 class TmdbService
+  BASE_URL = "https://api.themoviedb.org/3"
   TOKEN = ENV["TMDB_BEARER_TOKEN"]
 
   def self.authenticate
+    get_request("/authentication")
+  end
+
+  def self.popular_movies
+    response = get_request("/movie/popular")
+
+    response["results"] || []
+  end
+
+  private
+
+  def self.get_request(endpoint)
     require "uri"
     require "net/http"
+    require "json"
 
-    url = URI("https://api.themoviedb.org/3/authentication")
+    url = URI("#{BASE_URL}#{endpoint}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
 
@@ -14,6 +28,13 @@ class TmdbService
     request["Authorization"] = "Bearer #{TOKEN}"
 
     response = http.request(request)
-    JSON.parse(response.read_body)
+
+    if response.is_a?(Net::HTTPSuccess)
+      JSON.parse(response.read_body)
+    else
+      { "error" => "API request failed", "code" => response.code }
+    end
+  rescue StandardError => e
+    { "error" => e.message }
   end
 end
