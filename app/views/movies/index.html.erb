@@ -1,0 +1,41 @@
+<div class="max-w-full mx-auto px-10 py-10">
+  <h2 class="text-center text-4xl font-['Anton'] uppercase tracking-tighter mb-8 text-black ml-2">
+    Popular <span class="text-red-600 text-center">Now</span>
+  </h2>
+
+  <div class="flex overflow-x-auto gap-4 no-scrollbar snap-x snap-mandatory -my-10 py-10 px-10 pb-8">
+    <% @movies.each do |movie| %>
+      <div class="flex-none w-[220px] snap-start">
+        <div class="bg-black rounded-4xl overflow-hidden shadow-xl transition-transform hover:scale-97 duration-300">
+          
+          <div class="aspect-2/3 relative bg-gray-900">
+            <% if movie['poster_path'] %>
+              <img src="https://image.tmdb.org/t/p/w500<%= movie['poster_path'] %>" 
+                   class="w-full h-full object-cover object-center" 
+                   alt="<%= movie['title'] %>">
+            <% end %>
+          </div>
+
+          <div class="p-4 bg-black">
+            <h3 class="text-white font-black text-sm uppercase tracking-tight truncate mb-1">
+              <%= movie['title'] %>
+            </h3>
+            
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] text-gray-500 font-bold tracking-widest uppercase">
+                <%= movie['release_date']&.split('-')&.first %>
+              </span>
+              
+              <div class="flex items-center gap-1">
+                <span class="text-yellow-400 text-xs">★</span>
+                <span class="text-white text-xs font-black">
+                  <%= movie['vote_average']&.round(1) %>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
