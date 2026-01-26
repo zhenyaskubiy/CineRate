@@ -5,4 +5,5 @@ Rails.application.routes.draw do
 
   get "about", to: "pages#about"
   get "trending", to: "movies#index"
+  get "media", to: "pages#media"
 end

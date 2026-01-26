@@ -1,0 +1,81 @@
+<div class="min-h-screen text-black px-6 py-10 md:px-12">
+    <div class="flex flex-col items-center mb-16 text-center">
+    <div class="mb-8">
+      <h2 class="text-4xl font-['Anton'] uppercase tracking-tighter text-black leading-none">
+        Explore <span class="text-red-600"><%= @media_type == 'movie' ? 'Movies' : 'TV Series' %></span>
+      </h2>
+      <p class="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-4">
+        Discover the best from TMDB database
+      </p>
+    </div>
+
+    <div class="flex gap-4">
+      <%= link_to "Movies", media_path(type: 'movie'), 
+          class: "px-8 py-3 rounded-full border-2 border-black font-black uppercase text-xs transition-all duration-300 #{ @media_type == 'movie' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white' }" %>
+      
+      <%= link_to "TV Series", media_path(type: 'tv'), 
+          class: "px-8 py-3 rounded-full border-2 border-black font-black uppercase text-xs transition-all duration-300 #{ @media_type == 'tv' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white' }" %>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto">
+    <% if @titles.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-12">
+        <% @titles.first(15).each do |title| %>
+          <div class="w-full">
+            <div class="group relative bg-black rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 hover:scale-95">
+              
+              <div class="aspect-2/3 relative bg-gray-900">
+                <% if title['poster_path'].present? %>
+                  <img src="https://image.tmdb.org/t/p/w500<%= title['poster_path'] %>" 
+                       class="w-full h-full object-cover" 
+                       alt="<%= title['title'] || title['name'] %>">
+                <% end %>
+                
+                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                  <span class="text-black font-black text-[10px]">
+                    ★ <%= title['vote_average']&.round(1) %>
+                  </span>
+                </div>
+              </div>
+
+              <div class="p-5">
+                <h3 class="text-white font-black text-xs uppercase truncate mb-1">
+                  <%= title['title'] || title['name'] %>
+                </h3>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-500 font-bold text-[9px] uppercase">
+                    <%= (title['release_date'] || title['first_air_date'])&.split('-')&.first %>
+                  </span>
+                  <span class="text-[8px] text-red-600 font-black uppercase">
+                    <%= @media_type %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="w-full text-center py-20">
+        <p class="text-gray-400 uppercase font-black">No results found</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-20 flex justify-center items-center gap-10">
+    <% if @page > 1 %>
+      <%= link_to media_path(type: @media_type, page: @page - 1), class: "text-gray-400 hover:text-black font-black uppercase text-[10px] tracking-widest" do %>
+        ← Prev
+      <% end %>
+    <% end %>
+
+    <div class="flex flex-col items-center">
+      <span class="font-['Anton'] text-4xl leading-none"><%= @page %></span>
+    </div>
+
+    <%= link_to media_path(type: @media_type, page: @page + 1), class: "text-gray-400 hover:text-black font-black uppercase text-[10px] tracking-widest" do %>
+      Next →
+    <% end %>
+  </div>
+</div>

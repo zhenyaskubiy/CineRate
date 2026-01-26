@@ -12,6 +12,14 @@ class TmdbService
     response["results"] || []
   end
 
+  def self.discover_movies(page = 1)
+    get_request("/discover/movie?page=#{page}")["results"] || []
+  end
+
+  def self.discover_series(page = 1)
+    get_request("/discover/tv?page=#{page}")["results"] || []
+  end
+
   private
 
   def self.get_request(endpoint)
