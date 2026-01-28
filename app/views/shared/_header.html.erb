@@ -40,12 +40,20 @@
 
     </div>
     
-    <nav class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[11px] font-bold tracking-[0.2em]">
-      <%= link_to "ALL MEDIA", media_path, class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
-      <%= link_to "TRENDING", trending_path, class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
-      <%= link_to "TOP 10", "#", class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
-      <%= link_to "ABOUT", about_path, class: "nav-link-animated text-white hover:text-white transition whitespace-nowrap uppercase" %>
-    </nav>
+   <nav class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[11px] font-bold tracking-[0.2em]">
+  <%= link_to "ALL MEDIA", media_path,
+    class: "nav-link-animated transition whitespace-nowrap uppercase #{current_page?(media_path) ? 'text-red-500' : 'text-white hover:text-white'}" %>
+
+  <%= link_to "TRENDING", trending_path,
+    class: "nav-link-animated transition whitespace-nowrap uppercase #{current_page?(trending_path) ? 'text-red-500' : 'text-white hover:text-white'}" %>
+
+  <%= link_to "TOP 10", "#",
+    class: "nav-link-animated transition whitespace-nowrap uppercase text-white hover:text-white" %>
+
+  <%= link_to "ABOUT", about_path,
+    class: "nav-link-animated transition whitespace-nowrap uppercase #{current_page?(about_path) ? 'text-red-500' : 'text-white hover:text-white'}" %>
+</nav>
+
   </div>
 </header>
 
