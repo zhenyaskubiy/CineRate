@@ -1,3 +1,7 @@
+require "uri"
+require "net/http"
+require "json"
+
 class TmdbService
   BASE_URL = "https://api.themoviedb.org/3"
   TOKEN = ENV["TMDB_BEARER_TOKEN"]
@@ -6,10 +10,13 @@ class TmdbService
     get_request("/authentication")
   end
 
-  def self.popular_movies
-    response = get_request("/movie/popular")
+  def self.search(query, page = 1)
+    return [] if query.blank?
+    get_request("/search/multi?query=#{URI.encode_www_form_component(query)}&page=#{page}")["results"] || []
+  end
 
-    response["results"] || []
+  def self.popular_movies
+    get_request("/movie/popular")["results"] || []
   end
 
   def self.discover_movies(page = 1)
@@ -23,10 +30,6 @@ class TmdbService
   private
 
   def self.get_request(endpoint)
-    require "uri"
-    require "net/http"
-    require "json"
-
     url = URI("#{BASE_URL}#{endpoint}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
