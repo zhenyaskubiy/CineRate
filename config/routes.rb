@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   get "media", to: "pages#media"
 
   resources :user_movies, only: [ :create ]
+  resource :profile, only: [ :edit, :update ], controller: "users"
+  resources :users, only: [:show]
 end

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -30,7 +31,7 @@
   </head>
 
   <body class="min-h-screen flex flex-col">
-    <div class="fixed inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(135%_135%_at_50%_0%,#fff_30%,#fecaca_65%,#f87171_100%)]"></div>   
+    <div class="fixed inset-0 -z-10 h-full w-full bg-white <%#[background:radial-gradient(135%_135%_at_50%_0%,#fff_30%,#fecaca_65%,#f87171_100%)]%>"></div>   
 
     <%= render "shared/header" %>
 
