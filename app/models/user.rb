@@ -8,21 +8,23 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   def watchlist
-    user_movies.want_to_watch
+    user_movies.want_to_watch.count
   end
 
   def watched_movies
-    user_movies.watched
+    user_movies.watched.count
   end
 
   def not_interested_movies
-    user_movies.not_interested
+    user_movies.not_interested.count
   end
 
   def full_name_upcase
-    "#{first_name} #{last_name}".upcase.strip
-  rescue
-    email.split("@").first.upcase
+    if first_name.present? || last_name.present?
+      "#{first_name} #{last_name}".strip.upcase
+    else
+      email.to_s.split("@").first.to_s.upcase
+    end
   end
 
   GENDERS = [ "Male", "Female" ]
