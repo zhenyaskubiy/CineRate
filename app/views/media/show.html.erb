@@ -9,18 +9,65 @@
         <div class="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent"></div>
       </div>
     <% end %>
-
+            
     <div class="relative z-10 w-full flex flex-col md:flex-row items-center justify-center px-6 md:px-20 gap-16">
       <div class="w-64 md:w-96 shrink-0 shadow-2xl rounded-[2.5rem] overflow-hidden border-2 border-white/20">
         <img src="https://image.tmdb.org/t/p/w500<%= @details['poster_path'] %>" class="w-full" alt="poster">
       </div>
       
-      <div class="max-w-4xl flex flex-col items-center md:items-start">
-        <nav class="flex gap-8 mb-12 ml-5 text-[15px] font-black uppercase tracking-[0.3em] text-white/70">
-          <%= link_to "All Media", media_path, class: "hover:text-white transition-colors" %>
-          <%= link_to "Trending", trending_path, class: "hover:text-white transition-colors" %>
-          <%= link_to "Top 10", "#", class: "hover:text-white transition-colors" %>
-          <%= link_to "About", about_path, class: "hover:text-white transition-colors" %>
+      <div class="max-w-4xl flex flex-col items-center md:items-start w-full">
+        
+        <nav class="flex items-center justify-between w-full mb-12">
+          <div class="flex gap-8 text-[13px] md:text-[15px] font-black uppercase tracking-[0.3em] text-white/70">
+            <%= link_to "All Media", media_path, class: "hover:text-white transition-colors" %>
+            <%= link_to "Trending", trending_path, class: "hover:text-white transition-colors" %>
+            <%= link_to "Top 10", "#", class: "hover:text-white transition-colors" %>
+          </div>
+
+          <% if user_signed_in? %>
+            <div class="relative" x-data="{ open: false }" @click.away="open = false">
+              <button @click="open = !open" class="group flex items-center gap-3 focus:outline-none">
+                <span class="hidden md:inline text-[10px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">
+                  <%= current_user.full_name_upcase %>
+                </span>
+                <div class="w-10 h-10 rounded-xl overflow-hidden bg-black/40 border border-white/20 group-hover:border-red-600 transition-all duration-300 p-0.5">
+                  <div class="w-full h-full rounded-[9px] overflow-hidden">
+                    <% if current_user.avatar.attached? %>
+                      <%= image_tag current_user.avatar, class: "w-full h-full object-cover" %>
+                    <% else %>
+                      <div class="w-full h-full bg-gray-900 flex items-center justify-center text-white text-[10px] font-black">
+                        <%= current_user.email[0].upcase %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </button>
+
+              <div x-show="open" 
+                  x-transition:enter="transition ease-out duration-200"
+                  x-transition:enter-start="opacity-0 scale-95 translate-y-[-10px]"
+                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                  class="absolute right-0 mt-3 w-56 origin-top-right rounded-2xl bg-white shadow-2xl border border-gray-100 py-2 z-50">
+                <div class="px-4 py-3 border-b border-gray-50">
+                  <p class="text-[10px] font-black uppercase tracking-widest text-red-600">Account</p>
+                  <p class="text-xs font-bold text-slate-900 truncate"><%= current_user.full_name_upcase %></p>
+                </div>
+                <div class="py-1">
+                  <%= link_to user_path(current_user), class: "flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-600 hover:bg-gray-50 hover:text-red-600 transition-colors" do %>
+                    Profile
+                  <% end %>
+                  <%= link_to edit_profile_path, class: "flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-600 hover:bg-gray-50 hover:text-red-600 transition-colors" do %>
+                    Settings
+                  <% end %>
+                </div>
+                <div class="mt-1 border-t border-gray-50 pt-1">
+                  <%= button_to destroy_user_session_path, method: :delete, class: "w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-red-500 hover:bg-red-50 transition-colors text-left" do %>
+                    Sign Out
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </nav>
 
         <h1 class="text-6xl md:text-9xl font-['Anton'] uppercase leading-[0.9] tracking-tighter text-white drop-shadow-2xl">
@@ -38,21 +85,31 @@
         </div>
 
         <div class="mt-10 pt-8 border-t border-white/10 w-full max-w-md">
-          <% current_status = current_user.user_movies.find_by(tmdb_id: @details['id'])&.status %>   
-          <div class="grid grid-cols-3 gap-3 items-stretch">
-            <% UserMovie.statuses.keys.each do |status_name| %>
-              <%= button_to user_movies_path(tmdb_id: @details['id'], status: status_name), 
-                    method: :post, 
-                    form_class: "m-0 h-full", 
-                    class: "w-full h-full px-2 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all 
-                    text-center border-2 leading-tight flex items-center justify-center
-                    #{current_status == status_name ? 'bg-white text-black border-white 
-                    shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'bg-transparent text-white border-white/20 
-                    hover:border-white hover:bg-white/10'}" do %>
-                <%= status_name.tr('_', ' ') %>
+          <%= turbo_frame_tag "media_status_btns_#{@details['id']}" do %>
+          <% if flash[:notice] %>
+            <div class="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
+              <div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                <%= flash[:notice] %>
+              </span>
+            </div>
+          <% end %>
+            <% current_status = current_user.user_movies.find_by(tmdb_id: @details['id'])&.status %>   
+            <div class="grid grid-cols-3 gap-3 items-stretch">
+              <% UserMovie.statuses.keys.each do |status_name| %>
+                <%= button_to user_movies_path(tmdb_id: @details['id'], status: status_name), 
+                      method: :post, 
+                      form_class: "m-0 h-full", 
+                      class: "w-full h-full px-2 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all 
+                      text-center border-2 leading-tight flex items-center justify-center
+                      #{current_status == status_name ? 'bg-white text-black border-white 
+                      shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'bg-transparent text-white border-white/20 
+                      hover:border-white hover:bg-white/10'}" do %>
+                  <%= status_name.tr('_', ' ') %>
+                <% end %>
               <% end %>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
@@ -72,7 +129,7 @@
           <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Status</span><span class="font-black uppercase"><%= @details['status'] %></span></li>
           <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Language</span><span class="font-black uppercase"><%= @details['original_language'] %></span></li>
           <% if @details['runtime'] && @details['runtime'] > 0 %>
-            <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Duration</span><span class="font-black uppercase"><%= @details['runtime'] %> min</span></li>
+            <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Duration</span><span class="font-black uppercase text-xs"><%= @details['runtime'] %> min</span></li>
           <% end %>
         </ul>
         <%= link_to "← Back to Explore", :back, class: "mt-10 inline-block text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-red-600 hover:border-red-600 transition-colors" %>
