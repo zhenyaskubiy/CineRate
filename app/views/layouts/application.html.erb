@@ -33,7 +33,9 @@
   <body class="min-h-screen flex flex-col">
     <div class="fixed inset-0 -z-10 h-full w-full bg-white <%#[background:radial-gradient(135%_135%_at_50%_0%,#fff_30%,#fecaca_65%,#f87171_100%)]%>"></div>   
 
-    <%= render "shared/header" %>
+    <% unless controller_name == 'media' && action_name == 'show' %>
+      <%= render 'shared/header' %>
+    <% end %>
 
     <div class="fixed bottom-8 right-6 z-100 flex flex-col gap-3 pointer-events-none max-w-[350px] w-full">
       <% if notice %>

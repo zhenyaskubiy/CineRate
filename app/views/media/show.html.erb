@@ -1,0 +1,82 @@
+<div class="min-h-screen bg-white text-black font-sans">
+  <div class="relative min-h-[90vh] w-full overflow-hidden bg-black flex items-center">
+    
+    <% if @details['backdrop_path'].present? %>
+      <div class="absolute inset-0">
+        <img src="https://image.tmdb.org/t/p/original<%= @details['backdrop_path'] %>" 
+             class="w-full h-full object-cover opacity-60 scale-105" alt="background">
+        <div class="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-transparent"></div>
+        <div class="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent"></div>
+      </div>
+    <% end %>
+
+    <div class="relative z-10 w-full flex flex-col md:flex-row items-center justify-center px-6 md:px-20 gap-16">
+      <div class="w-64 md:w-96 shrink-0 shadow-2xl rounded-[2.5rem] overflow-hidden border-2 border-white/20">
+        <img src="https://image.tmdb.org/t/p/w500<%= @details['poster_path'] %>" class="w-full" alt="poster">
+      </div>
+      
+      <div class="max-w-4xl flex flex-col items-center md:items-start">
+        <nav class="flex gap-8 mb-12 ml-5 text-[15px] font-black uppercase tracking-[0.3em] text-white/70">
+          <%= link_to "All Media", media_path, class: "hover:text-white transition-colors" %>
+          <%= link_to "Trending", trending_path, class: "hover:text-white transition-colors" %>
+          <%= link_to "Top 10", "#", class: "hover:text-white transition-colors" %>
+          <%= link_to "About", about_path, class: "hover:text-white transition-colors" %>
+        </nav>
+
+        <h1 class="text-6xl md:text-9xl font-['Anton'] uppercase leading-[0.9] tracking-tighter text-white drop-shadow-2xl">
+          <%= @details['title'] || @details['name'] %>
+        </h1>
+
+        <div class="flex items-center gap-4 mt-8">
+          <span class="bg-red-600 text-white px-5 py-1.5 rounded-full font-black text-sm uppercase shadow-lg">
+            ★ <%= @details['vote_average']&.round(1) %>
+          </span>
+          <span class="text-white font-bold uppercase tracking-widest text-xs opacity-90">
+            <%= (@details['release_date'] || @details['first_air_date'])&.split('-')&.first %> • 
+            <%= @details['genres']&.map { |g| g['name'] }&.join(' / ') %>
+          </span>
+        </div>
+
+        <div class="mt-10 pt-8 border-t border-white/10 w-full max-w-md">
+          <% current_status = current_user.user_movies.find_by(tmdb_id: @details['id'])&.status %>   
+          <div class="grid grid-cols-3 gap-3 items-stretch">
+            <% UserMovie.statuses.keys.each do |status_name| %>
+              <%= button_to user_movies_path(tmdb_id: @details['id'], status: status_name), 
+                    method: :post, 
+                    form_class: "m-0 h-full", 
+                    class: "w-full h-full px-2 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all 
+                    text-center border-2 leading-tight flex items-center justify-center
+                    #{current_status == status_name ? 'bg-white text-black border-white 
+                    shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'bg-transparent text-white border-white/20 
+                    hover:border-white hover:bg-white/10'}" do %>
+                <%= status_name.tr('_', ' ') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 py-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+      <div class="md:col-span-2">
+        <h2 class="text-3xl font-['Anton'] uppercase mb-6 tracking-tight">Overview</h2>
+        <p class="text-gray-600 text-lg leading-relaxed font-medium">
+          <%= @details['overview'] %>
+        </p>
+      </div>
+      <div class="bg-gray-50 p-8 rounded-4xl border border-gray-100 self-start">
+        <h2 class="text-xs font-black uppercase mb-6 text-red-600 tracking-widest">Quick Info</h2>
+        <ul class="space-y-4 text-sm">
+          <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Status</span><span class="font-black uppercase"><%= @details['status'] %></span></li>
+          <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Language</span><span class="font-black uppercase"><%= @details['original_language'] %></span></li>
+          <% if @details['runtime'] && @details['runtime'] > 0 %>
+            <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Duration</span><span class="font-black uppercase"><%= @details['runtime'] %> min</span></li>
+          <% end %>
+        </ul>
+        <%= link_to "← Back to Explore", :back, class: "mt-10 inline-block text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-red-600 hover:border-red-600 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>

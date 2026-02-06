@@ -6,6 +6,7 @@ class TmdbService
   BASE_URL = "https://api.themoviedb.org/3"
   TOKEN = ENV["TMDB_BEARER_TOKEN"]
 
+
   def self.authenticate
     get_request("/authentication")
   end
@@ -25,6 +26,13 @@ class TmdbService
 
   def self.discover_series(page = 1)
     get_request("/discover/tv?page=#{page}")["results"] || []
+  end
+
+  def self.fetch_details(type, id)
+    endpoint = "/#{type}/#{id}?append_to_response=credits,videos"
+    result = get_request(endpoint)
+
+    result.key?("error") ? nil : result
   end
 
   private

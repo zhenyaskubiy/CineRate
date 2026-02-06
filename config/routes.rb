@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users
+  root "media#index"
 
-  root "pages#media"
+  resources :media, only: [ :index ]
+  get "media/:type/:id", to: "media#show", as: :media_item
 
   get "about", to: "pages#about"
-  get "trending", to: "movies#index"
-  get "media", to: "pages#media"
-
-  resources :user_movies, only: [ :create ]
   resource :profile, only: [ :edit, :update ], controller: "users"
-  resources :users, only: [:show]
+  resources :users, only: [ :show ]
+  resources :user_movies, only: [ :create ]
+  get "trending", to: "movies#index"
 end
