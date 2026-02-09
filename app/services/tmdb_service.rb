@@ -35,6 +35,24 @@ class TmdbService
     result.key?("error") ? nil : result
   end
 
+  def self.fetch_movie_details(id)
+    fetch_details("movie", id)
+  end
+
+  def self.fetch_tv_details(id)
+    data = fetch_details("tv", id)
+    return nil unless data
+
+    episode_duration = data["episode_run_time"]&.first || 0
+    if episode_duration.nil? || episode_duration == 0
+      episode_duration = 45
+    end
+    total_episodes = data["number_of_episodes"] || 0
+
+    { "runtime" => episode_duration * total_episodes
+  }
+  end
+
   private
 
   def self.get_request(endpoint)

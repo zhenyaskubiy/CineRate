@@ -1,64 +1,85 @@
-<div class="flex justify-center mt-6">
-  <%= form_with url: media_path, method: :get, local: true, class: "flex items-center border pl-4 gap-2 bg-white border-gray-500/30 h-[46px] rounded-full overflow-hidden max-w-md w-full" do |f| %>
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="#6B7280">
-      <path d="M13 3C7.489 3 3 7.489 3 13s4.489 10 10 10a9.95 9.95 0 0 0 6.322-2.264l5.971 5.971a1 1 0 1 0 1.414-1.414l-5.97-5.97A9.95 9.95 0 0 0 23 13c0-5.511-4.489-10-10-10m0 2c4.43 0 8 3.57 8 8s-3.57 8-8 8-8-3.57-8-8 3.57-8 8-8"/>
-    </svg>
-    <%= f.text_field :query, value: params[:query], name: :query, placeholder: "Search movies & series...", class: "w-full h-full outline-none text-sm text-gray-500 bg-transparent" %>
-    <%= f.submit "Search", class: "bg-red-500 w-32 h-9 rounded-full text-sm text-white mr-[5px] cursor-pointer hover:bg-red-600 transition-colors" %>
-  <% end %>
-</div>
-
-<div class="min-h-screen text-black px-6 py-10 md:px-12">
-  <div class="flex flex-col items-center mb-16 text-center">
-    <div class="mb-8">
-      <h2 class="text-4xl font-['Anton'] uppercase tracking-tighter text-black leading-none">
-        Explore <span class="text-red-600"><%= @media_type == 'movie' ? 'Movies' : 'TV Series' %></span>
-      </h2>
-      <p class="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-4">Discover the best from TMDB database</p>
-    </div>
-
-    <div class="flex gap-4">
-      <%= link_to "Movies", media_path(type: 'movie'), class: "px-8 py-3 rounded-full border-2 border-black font-black uppercase text-xs transition-all duration-300 #{ @active_filter == 'movie' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white' }" %>
-      <%= link_to "TV Series", media_path(type: 'tv'), class: "px-8 py-3 rounded-full border-2 border-black font-black uppercase text-xs transition-all duration-300 #{ @active_filter == 'tv' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white' }" %>
-    </div>
+<div class="min-h-screen bg-white relative px-6 py-10 md:px-12 text-black overflow-hidden">
+  
+  <div class="fixed inset-0 -z-10 pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] animate-pulse" 
+         style="background: radial-gradient(circle, rgba(254,226,226,0.5) 0%, transparent 70%); will-change: transform;"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%]" 
+         style="background: radial-gradient(circle, rgba(239,246,255,0.4) 0%, transparent 70%); animation: pulse 8s infinite alternate;这将 will-change: transform;"></div>
+    <div class="absolute inset-0 opacity-[0.02]" style="background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
   </div>
 
-  <div class="max-w-7xl mx-auto">
-    <% if @titles.any? %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-12">
-        <% @titles.first(15).each do |title| %>
-          <div class="w-full">
-            <div class="group relative bg-black rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 hover:scale-95 flex flex-col h-full">
-              <% m_type = title['media_type'] || @media_type %>
-              <%= link_to media_item_path(type: m_type, id: title['id']), class: "flex flex-col h-full no-underline" do %>
-                <div class="aspect-2/3 relative bg-gray-900">
-                  <img src="https://image.tmdb.org/t/p/w500<%= title['poster_path'] %>" class="w-full h-full object-cover">
-                  <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span class="text-black font-black text-[10px]">★ <%= title['vote_average']&.round(1) %></span>
-                  </div>
-                </div>
-                <div class="p-5 flex flex-col">
-                  <div class="mb-4">
-                    <h3 class="text-white font-black text-xs uppercase truncate mb-1"><%= title['title'] || title['name'] %></h3>
-                    <div class="flex justify-between items-center">
-                      <span class="text-gray-500 font-bold text-[9px] uppercase"><%= (title['release_date'] || title['first_air_date'])&.split('-')&.first %></span>
-                      <span class="text-[8px] text-red-600 font-black uppercase"><%= m_type == 'tv' ? 'TV Series' : 'Movie' %></span>
+  <style>
+    @keyframes pulse {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3%, 5%) scale(1.05); }
+    }
+  </style>
+
+  <div class="flex justify-center mt-6 relative z-10">
+    <%= form_with url: media_path, method: :get, local: true, class: "flex items-center border pl-4 gap-2 bg-white/70 backdrop-blur-md border-gray-500/20 h-[50px] rounded-full overflow-hidden max-w-md w-full focus-within:border-red-500/50 transition-all shadow-sm" do |f| %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <%= f.text_field :query, value: params[:query], name: :query, placeholder: "Search movies & series...", class: "w-full h-full outline-none text-sm text-gray-600 bg-transparent font-medium" %>
+      <%= f.submit "Search", class: "bg-black w-28 h-10 rounded-full text-[10px] font-black uppercase tracking-widest text-white mr-[5px] cursor-pointer hover:bg-red-600 transition-all" %>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag "media_list_content" do %>
+    <div class="flex flex-col items-center mb-16 text-center mt-16 relative z-10">
+      <div class="mb-8">
+        <h2 class="text-6xl md:text-8xl font-['Anton'] uppercase tracking-tighter text-black leading-none">
+          Explore <span class="text-red-600"><%= @media_type == 'movie' ? 'Movies' : 'TV Series' %></span>
+        </h2>
+        <p class="text-gray-400 font-black uppercase tracking-[0.4em] text-[10px] mt-6 bg-white/50 backdrop-blur-sm px-4 py-1 rounded-full inline-block border border-gray-100">
+          Premium Database
+        </p>
+      </div>
+
+      <div class="flex gap-2 p-1.5 bg-gray-100/50 backdrop-blur-md rounded-full border border-gray-200 shadow-inner">
+        <%= link_to "Movies", media_path(type: 'movie'), data: { turbo_frame: "media_list_content" }, class: "px-10 py-3 rounded-full font-black uppercase text-[10px] tracking-widest transition-all #{ @active_filter == 'movie' ? 'bg-white text-black shadow-md' : 'text-gray-400 hover:text-black' }" %>
+        <%= link_to "TV Series", media_path(type: 'tv'), data: { turbo_frame: "media_list_content" }, class: "px-10 py-3 rounded-full font-black uppercase text-[10px] tracking-widest transition-all #{ @active_filter == 'tv' ? 'bg-white text-black shadow-md' : 'text-gray-400 hover:text-black' }" %>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <% if @titles.any? %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-20">
+          <% @titles.first(15).each do |title| %>
+            <div class="w-full">
+              <div class="group relative bg-white rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] hover:-translate-y-3 flex flex-col h-full border border-gray-50">
+                <% m_type = title['media_type'] || @media_type %>
+                <%= link_to media_item_path(type: m_type, id: title['id']), data: { turbo: false }, class: "flex flex-col h-full no-underline" do %>
+                  <div class="aspect-2/3 relative overflow-hidden bg-gray-50">
+                    <img src="https://image.tmdb.org/t/p/w500<%= title['poster_path'] %>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                    <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-sm">
+                      <span class="text-black font-black text-[10px]">★ <%= title['vote_average']&.round(1) %></span>
                     </div>
                   </div>
-                </div>
-              <% end %>
+                  <div class="p-8 flex flex-col">
+                    <h3 class="text-black font-black text-xs uppercase truncate mb-3 tracking-tight group-hover:text-red-600 transition-colors"><%= title['title'] || title['name'] %></h3>
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest"><%= (title['release_date'] || title['first_air_date'])&.split('-')&.first %></span>
+                      <span class="text-[9px] text-white bg-black font-black uppercase px-2 py-1 rounded-md"><%= m_type == 'tv' ? 'TV' : 'Movie' %></span>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="mt-20 flex justify-center items-center gap-10 font-black uppercase text-[10px]">
-    <% if @page > 1 %>
-      <%= link_to "← Prev", media_path(type: @media_type, page: @page - 1, query: @query), class: "text-gray-400 hover:text-black" %>
-    <% end %>
-    <span class="font-['Anton'] text-4xl"><%= @page %></span>
-    <%= link_to "Next →", media_path(type: @media_type, page: @page + 1, query: @query), class: "text-gray-400 hover:text-black" %>
-  </div>
+    <div class="mt-32 flex justify-center items-center gap-16 font-black uppercase text-[11px] relative z-10 pb-20">
+      <% if @page > 1 %>
+        <%= link_to "← Prev", media_path(type: @media_type, page: @page - 1, query: @query), data: { turbo_frame: "media_list_content" }, class: "text-gray-400 hover:text-black transition-colors" %>
+      <% end %>
+      <div class="flex flex-col items-center">
+          <span class="font-['Anton'] text-5xl leading-none text-black"><%= @page %></span>
+      </div>
+      <%= link_to "Next →", media_path(type: @media_type, page: @page + 1, query: @query), data: { turbo_frame: "media_list_content" }, class: "text-gray-400 hover:text-black transition-colors" %>
+    </div>
+  <% end %>
 </div>

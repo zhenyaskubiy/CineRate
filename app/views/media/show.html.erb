@@ -86,18 +86,25 @@
 
         <div class="mt-10 pt-8 border-t border-white/10 w-full max-w-md">
           <%= turbo_frame_tag "media_status_btns_#{@details['id']}" do %>
-          <% if flash[:notice] %>
-            <div class="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
-              <div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
-              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">
-                <%= flash[:notice] %>
-              </span>
-            </div>
-          <% end %>
+            <% if flash[:notice] %>
+              <div class="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
+                <div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                  <%= flash[:notice] %>
+                </span>
+              </div>
+            <% end %>
+            
             <% current_status = current_user.user_movies.find_by(tmdb_id: @details['id'])&.status %>   
+            <% is_tv = @details['first_air_date'].present? || @details['number_of_seasons'].present? %>
+            
             <div class="grid grid-cols-3 gap-3 items-stretch">
               <% UserMovie.statuses.keys.each do |status_name| %>
-                <%= button_to user_movies_path(tmdb_id: @details['id'], status: status_name), 
+                <%= button_to user_movies_path(
+                      tmdb_id: @details['id'], 
+                      status: status_name, 
+                      media_type: is_tv ? 'tv' : 'movie'
+                    ), 
                       method: :post, 
                       form_class: "m-0 h-full", 
                       class: "w-full h-full px-2 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all 
@@ -126,10 +133,24 @@
       <div class="bg-gray-50 p-8 rounded-4xl border border-gray-100 self-start">
         <h2 class="text-xs font-black uppercase mb-6 text-red-600 tracking-widest">Quick Info</h2>
         <ul class="space-y-4 text-sm">
-          <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Status</span><span class="font-black uppercase"><%= @details['status'] %></span></li>
-          <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Language</span><span class="font-black uppercase"><%= @details['original_language'] %></span></li>
-          <% if @details['runtime'] && @details['runtime'] > 0 %>
+          <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Status</span><span class="font-black uppercase text-xs"><%= @details['status'] %></span></li>
+          <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Language</span><span class="font-black uppercase text-xs"><%= @details['original_language'] %></span></li>
+          
+          <% if @details['runtime'].present? && @details['runtime'] > 0 %>
             <li class="flex flex-col"><span class="text-[10px] uppercase font-bold text-gray-400">Duration</span><span class="font-black uppercase text-xs"><%= @details['runtime'] %> min</span></li>
+          <% elsif @details['number_of_episodes'].present? %>
+            <li class="flex flex-col">
+              <span class="text-[10px] uppercase font-bold text-gray-400">Episodes</span>
+              <span class="font-black uppercase text-xs"><%= @details['number_of_episodes'] %> eps</span>
+            </li>
+            <% if @details['episode_run_time']&.any? %>
+              <li class="flex flex-col">
+                <span class="text-[10px] uppercase font-bold text-gray-400">Total Est. Time</span>
+                <span class="font-black uppercase text-xs">
+                  <%= @details['episode_run_time'].first * @details['number_of_episodes'] %> min
+                </span>
+              </li>
+            <% end %>
           <% end %>
         </ul>
         <%= link_to "← Back to Explore", :back, class: "mt-10 inline-block text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-red-600 hover:border-red-600 transition-colors" %>
