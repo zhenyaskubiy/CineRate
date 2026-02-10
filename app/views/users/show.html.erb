@@ -63,32 +63,68 @@
       </div>
     </div>
 
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="mt-8 bg-white rounded-4xl p-12 border border-gray-100 shadow-sm text-center relative overflow-hidden">
+      <div class="relative z-10">
+        <p class="text-[10px] font-black uppercase tracking-[0.4em] text-red-600 mb-4 mt-4">Total Watch Time</p>
+        
+        <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+          <% 
+            total_min = @user.total_watch_time || 0
+            days = total_min / 1440
+            hours = (total_min % 1440) / 60
+            minutes = total_min % 60
+          %>
+          
+          <div class="flex flex-col">
+            <span class="text-6xl md:text-7xl font-['Anton'] text-slate-900 leading-none"><%= days %></span>
+            <span class="text-[9px] font-black uppercase tracking-widest text-gray-400 mt-4 mb-4">Days</span>
+          </div>
+
+          <div class="text-3xl font-['Anton'] text-red-600 opacity-30 -mt-5 hidden md:block">:</div>
+
+          <div class="flex flex-col">
+            <span class="text-6xl md:text-7xl font-['Anton'] text-slate-900 leading-none"><%= hours %></span>
+            <span class="text-[9px] font-black uppercase tracking-widest text-gray-400 mt-4 mb-4">Hours</span>
+          </div>
+
+          <div class="text-3xl font-['Anton'] text-red-600 opacity-30 -mt-5 hidden md:block">:</div>
+
+          <div class="flex flex-col">
+            <span class="text-6xl md:text-7xl font-['Anton'] text-slate-900 leading-none"><%= minutes %></span>
+            <span class="text-[9px] font-black uppercase tracking-widest text-gray-400 mt-4 mb-4">Minutes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm text-center group hover:border-red-100 transition-all duration-300">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gray-50 text-slate-900 mb-4 group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p class="text-3xl font-['Anton'] text-slate-900 tracking-wider"><%= @user.watched_movies %></p>
+        <p class="text-3xl font-['Anton'] text-slate-900 tracking-wider"><%= @user.user_movies.where(status: 'watched').count %></p>
         <p class="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mt-1">Watched</p>
       </div>
+
       <div class="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm text-center group hover:border-red-100 transition-all duration-300">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gray-50 text-slate-900 mb-4 group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p class="text-3xl font-['Anton'] text-slate-900 tracking-wider"><%= @user.watchlist %></p>
+        <p class="text-3xl font-['Anton'] text-slate-900 tracking-wider"><%= @user.user_movies.where(status: 'watchlist').count %></p>
         <p class="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mt-1">Watchlist</p>
       </div>
+
       <div class="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm text-center group hover:border-red-100 transition-all duration-300">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gray-50 text-slate-900 mb-4 group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
           </svg>
         </div>
-        <p class="text-3xl font-['Anton'] text-slate-900 tracking-wider"><%= @user.not_interested_movies %></p>
+        <p class="text-3xl font-['Anton'] text-slate-900 tracking-wider"><%= @user.user_movies.where(status: 'not_interested').count %></p>
         <p class="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mt-1">Ignored</p>
       </div>
     </div>

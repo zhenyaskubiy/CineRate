@@ -15,7 +15,7 @@
     }
   </style>
 
-  <div class="flex justify-center mt-6 relative z-10">
+  <div class="flex justify-center  relative z-10">
     <%= form_with url: media_path, method: :get, local: true, class: "flex items-center border pl-4 gap-2 bg-white/70 backdrop-blur-md border-gray-500/20 h-[50px] rounded-full overflow-hidden max-w-md w-full focus-within:border-red-500/50 transition-all shadow-sm" do |f| %>
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
@@ -27,9 +27,9 @@
   </div>
 
   <%= turbo_frame_tag "media_list_content" do %>
-    <div class="flex flex-col items-center mb-16 text-center mt-16 relative z-10">
+    <div class="flex flex-col items-center mb-8 text-center mt-8 relative z-10">
       <div class="mb-8">
-        <h2 class="text-6xl md:text-8xl font-['Anton'] uppercase tracking-tighter text-black leading-none">
+        <h2 class="text-5xl md:text-6xl font-['Anton'] uppercase tracking-tighter text-black leading-none">
           Explore <span class="text-red-600"><%= @media_type == 'movie' ? 'Movies' : 'TV Series' %></span>
         </h2>
         <p class="text-gray-400 font-black uppercase tracking-[0.4em] text-[10px] mt-6 bg-white/50 backdrop-blur-sm px-4 py-1 rounded-full inline-block border border-gray-100">

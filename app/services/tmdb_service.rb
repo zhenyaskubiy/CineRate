@@ -49,8 +49,7 @@ class TmdbService
     end
     total_episodes = data["number_of_episodes"] || 0
 
-    { "runtime" => episode_duration * total_episodes
-  }
+    { "runtime" => episode_duration * total_episodes }
   end
 
   private
