@@ -23,7 +23,7 @@ class CalculateUserStatsJob
 
     return if total_minutes.zero? && send_email
 
-    user.update!(total_watch_time: total_minutes)
+    user.update_column(:total_watch_time, total_minutes)
 
     UserStatsMailer.summary_email(user).deliver_later if send_email
   end
