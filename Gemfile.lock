@@ -348,6 +348,8 @@ GEM
     ruby-vips (2.3.0)
       ffi (~> 1.12)
       logger
+    rufus-scheduler (3.9.2)
+      fugit (~> 1.1, >= 1.11.1)
     securerandom (0.4.1)
     sidekiq (8.1.0)
       connection_pool (>= 3.0.0)
@@ -355,6 +357,9 @@ GEM
       logger (>= 1.7.0)
       rack (>= 3.2.0)
       redis-client (>= 0.26.0)
+    sidekiq-scheduler (6.0.1)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 7.3, < 9)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -452,6 +457,7 @@ DEPENDENCIES
   rspec-rails
   rubocop-rails-omakase
   sidekiq
+  sidekiq-scheduler
   solid_cable
   solid_cache
   solid_queue

@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   get "about", to: "pages#about"
   resource :profile, only: [ :edit, :update ], controller: "users"
   resources :users, only: [ :show ]
-  resources :user_movies, only: [ :create ]
+
+  resources :user_movies, only: [ :create ] do
+    patch :update_rating, on: :collection
+  end
   get "trending", to: "movies#index"
 end

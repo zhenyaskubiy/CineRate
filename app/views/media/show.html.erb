@@ -97,7 +97,10 @@
             
             <% current_status = current_user.user_movies.find_by(tmdb_id: @details['id'])&.status %>   
             <% is_tv = @details['first_air_date'].present? || @details['number_of_seasons'].present? %>
-            
+
+            <% user_movie = current_user.user_movies.find_by(tmdb_id: @details['id']) %>
+            <% current_rating = user_movie&.rating %> 
+
             <div class="grid grid-cols-3 gap-3 items-stretch">
               <% UserMovie.statuses.keys.each do |status_name| %>
                 <%= button_to user_movies_path(
@@ -116,6 +119,74 @@
                 <% end %>
               <% end %>
             </div>
+            
+            <% if current_status == 'watched' %>
+                <div class="mt-6 pt-6 border-t border-white/10" x-data="{ 
+                  selectedRating: <%= current_rating || 0 %>, 
+                  hoverRating: 0,
+                  isSubmitting: false
+                }">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                      Your Rating
+                    </span>
+                    <span x-show="selectedRating > 0" 
+                          class="text-[10px] font-black uppercase tracking-widest text-white bg-red-600/20 px-3 py-1 rounded-full border border-red-600/30">
+                      <span x-text="selectedRating"></span> / 5
+                    </span>
+                  </div>
+                  
+                  <div class="flex items-center justify-center gap-2 py-4">
+                    <template x-for="star in [1, 2, 3, 4, 5]" :key="star">
+                      <%= form_with url: update_rating_user_movies_path, 
+                                    method: :patch, 
+                                    data: { turbo: false },
+                                    html: { 
+                                      class: "inline-block",
+                                      "@submit": "isSubmitting = true"
+                                    } do |f| %>
+                        <%= hidden_field_tag :tmdb_id, @details['id'] %>
+                        <%= hidden_field_tag :rating, nil, { 'x-model': 'star' } %>
+                        
+                        <button type="submit"
+                                @mouseenter="hoverRating = star"
+                                @mouseleave="hoverRating = 0"
+                                :disabled="isSubmitting"
+                                class="group relative transition-all duration-200 ease-out transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed">
+                          <div class="absolute inset-0 rounded-full blur-md transition-opacity duration-200"
+                              :class="(hoverRating >= star || selectedRating >= star) ? 'bg-red-600/40 opacity-100' : 'opacity-0'"></div>
+                          
+                          <svg class="w-10 h-10 md:w-12 md:h-12 relative transition-all duration-200" 
+                              viewBox="0 0 24 24" 
+                              fill="none"
+                              :class="(hoverRating >= star || selectedRating >= star) ? 'drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]' : ''">
+                            <path x-show="hoverRating >= star || selectedRating >= star"
+                                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                                  :fill="hoverRating >= star ? 'rgb(220 38 38)' : 'rgb(239 68 68)'"
+                                  class="transition-colors duration-150"/>
+                            
+                            <path x-show="hoverRating < star && selectedRating < star"
+                                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                                  stroke="rgba(255, 255, 255, 0.6)" 
+                                  stroke-width="1.5"
+                                  class="transition-all duration-150"/>
+                          </svg>
+                        </button>
+                      <% end %>
+                    </template>
+                  </div>
+
+                  <p x-show="selectedRating === 0" 
+                    class="text-center text-[9px] font-bold uppercase tracking-widest text-white/40 mt-2">
+                    Click a star to rate
+                  </p>
+                  <p x-show="selectedRating > 0" 
+                    class="text-center text-[9px] font-bold uppercase tracking-widest text-white/60 mt-2">
+                    Click to update rating
+                  </p>
+                </div>
+              <% end %>
+
           <% end %>
         </div>
       </div>

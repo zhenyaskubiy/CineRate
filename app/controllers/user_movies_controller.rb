@@ -28,10 +28,23 @@ class UserMoviesController < ApplicationController
     end
 
     if @user_movie.destroyed? || @user_movie.saved_change_to_status?
-      CalculateUserStatsJob.perform_async(current_user.id)
+      CalculateUserStatsJob.perform_async(current_user.id, false)
     end
 
+    redirect_back fallback_location: root_path, notice: msg
+  end
 
+  def update_rating
+    @user_movie = current_user.user_movies.find_by(tmdb_id: params[:tmdb_id])
+    if @user_movie && @user_movie.status == "watched"
+      if @user_movie.update(rating: params[:rating])
+        msg = "Rating updated to #{params[:rating]} stars"
+      else
+        msg = "Invalid rating"
+      end
+    else
+      msg = "Movie must be marked as watched to rate"
+    end
     redirect_back fallback_location: root_path, notice: msg
   end
 end

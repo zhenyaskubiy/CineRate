@@ -5,4 +5,5 @@ class UserMovie < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :tmdb_id }
   validates :tmdb_id, presence: true
+  validates :rating, inclusion: { in: 1..5 }, allow_nil: true
 end

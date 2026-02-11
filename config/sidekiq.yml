@@ -1,0 +1,6 @@
+:schedule:
+  daily_user_stats:
+    cron: '0 9 * * *'  
+    class: CalculateUserStatsJob
+    queue: default
+    args: [null, true]  
