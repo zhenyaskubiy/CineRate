@@ -9,6 +9,7 @@ class UserMoviesController < ApplicationController
       msg = "Removed from list"
     else
       @user_movie.status = params[:status]
+      @user_movie.media_type = params[:media_type] || "movie"
 
       if @user_movie.status == "watched"
         if params[:media_type] == "tv"
@@ -16,7 +17,6 @@ class UserMoviesController < ApplicationController
         else
           media_data = TmdbService.fetch_movie_details(params[:tmdb_id])
         end
-
         @user_movie.runtime = media_data["runtime"] if media_data
       end
 

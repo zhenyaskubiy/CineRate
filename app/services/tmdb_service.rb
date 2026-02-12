@@ -52,6 +52,18 @@ class TmdbService
     { "runtime" => episode_duration * total_episodes }
   end
 
+  def self.fetch_media_details(tmdb_id, media_type = "movie")
+    if media_type == "tv"
+      fetch_tv_full_details(tmdb_id)
+    else
+      fetch_movie_details(tmdb_id)
+    end
+  end
+
+  def self.fetch_tv_full_details(id)
+    fetch_details("tv", id)
+  end
+
   private
 
   def self.get_request(endpoint)

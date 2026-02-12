@@ -7,7 +7,11 @@ Rails.application.routes.draw do
 
   get "about", to: "pages#about"
   resource :profile, only: [ :edit, :update ], controller: "users"
-  resources :users, only: [ :show ]
+  resources :users, only: [ :show ] do
+    member do
+      get :rated_movies
+    end
+  end
 
   resources :user_movies, only: [ :create ] do
     patch :update_rating, on: :collection

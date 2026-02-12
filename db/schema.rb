@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_11_121012) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_12_145704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_11_121012) do
 
   create_table "user_movies", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "media_type"
     t.integer "rating"
     t.integer "runtime"
     t.integer "status"

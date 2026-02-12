@@ -44,7 +44,6 @@ RSpec.describe CalculateUserStatsJob, type: :job do
         user2 = create(:user)
         create(:user_movie, user: user, status: 'watched', runtime: 120)
         create(:user_movie, user: user2, status: 'watched', runtime: 90)
-        # rubocop:disable Layout/TrailingWhitespace
         expect {
           described_class.new.perform(nil, true)
         }.to change { user.reload.total_watch_time }.to(120)
