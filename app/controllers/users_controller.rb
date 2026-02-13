@@ -38,6 +38,48 @@ class UsersController < ApplicationController
       }
     end.compact
   end
+
+  def watchlist
+    user_movies = current_user.user_movies
+                              .where(status: "want_to_watch")
+                              .order(updated_at: :desc)
+
+    @watchlist_items = user_movies.map do |um|
+      media_data = TmdbService.fetch_media_details(um.tmdb_id, um.media_type || "movie")
+      next if media_data.nil? || media_data.key?("error")
+
+      {
+        user_movie: um,
+        title: media_data["title"] || media_data["name"] || "Unknown",
+        poster: media_data["poster_path"],
+        year: (media_data["release_date"] || media_data["first_air_date"])&.split("-")&.first,
+        media_type: um.media_type || "movie",
+        vote_average: media_data["vote_average"]
+      }
+    end.compact
+  end
+
+  def ignored
+    @user = User.find(params[:id])
+    user_movies = @user.user_movies
+                      .where(status: "not_interested")
+                      .order(updated_at: :desc)
+
+    @ignored_items = user_movies.map do |um|
+      media_data = TmdbService.fetch_media_details(um.tmdb_id, um.media_type || "movie")
+      next if media_data.nil? || media_data.key?("error")
+
+      {
+        user_movie: um,
+        title: media_data["title"] || media_data["name"] || "Unknown",
+        poster: media_data["poster_path"],
+        year: (media_data["release_date"] || media_data["first_air_date"])&.split("-")&.first,
+        media_type: um.media_type || "movie",
+        vote_average: media_data["vote_average"]
+      }
+    end.compact
+  end
+
   private
 
   def user_params

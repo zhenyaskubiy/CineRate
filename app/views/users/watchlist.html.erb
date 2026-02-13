@@ -1,0 +1,61 @@
+<div class="min-h-screen text-slate-900 px-6 py-12">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <%= link_to user_path(current_user), class: "inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-red-600 transition-colors" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Profile
+      <% end %>
+    </div>
+
+    <div class="mb-12 text-center">
+      <p class="text-[10px] font-black uppercase tracking-[0.4em] text-red-600 mb-2">My Watchlist</p>
+      <h1 class="text-5xl font-['Anton'] uppercase tracking-tight leading-none text-slate-900">
+        Want to Watch
+      </h1>
+      <p class="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-4">Movies & TV Shows</p>
+    </div>
+
+    <% if @watchlist_items.any? %>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <% @watchlist_items.each do |item| %>
+          <%= link_to media_item_path(type: item[:media_type], id: item[:user_movie].tmdb_id), data: { turbo: false }, class: "group no-underline" do %>
+            <div class="aspect-2/3 bg-gray-900 rounded-2xl overflow-hidden mb-3 relative shadow-lg">
+              <% if item[:poster] %>
+                <%= image_tag "https://image.tmdb.org/t/p/w500#{item[:poster]}", 
+                              class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300",
+                              alt: item[:title] %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-800 to-black">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                  </svg>
+                </div>
+              <% end %>
+              <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+              <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg">
+                <span class="text-black font-black text-[9px]">★ <%= item[:vote_average]&.round(1) %></span>
+              </div>
+            </div>
+            
+            <h3 class="text-sm font-bold text-slate-900 mb-1 line-clamp-2 group-hover:text-red-600 transition-colors"><%= item[:title] %></h3>
+            <% if item[:year] %>
+              <p class="text-xs text-gray-400 mb-2"><%= item[:year] %></p>
+            <% end %>
+            <span class="text-[9px] text-white bg-black font-black uppercase px-2 py-1 rounded-md inline-block">
+              <%= item[:media_type] == 'tv' ? 'TV' : 'Movie' %>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-4xl p-16 border border-gray-100 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+        </svg>
+        <p class="text-gray-400">Your watchlist is empty</p>
+      </div>
+    <% end %>
+  </div>
+</div>
