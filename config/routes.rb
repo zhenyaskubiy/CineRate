@@ -5,16 +5,17 @@ Rails.application.routes.draw do
   resources :media, only: [ :index ]
   get "media/:type/:id", to: "media#show", as: :media_item
 
-  get "about", to: "pages#about"
   resource :profile, only: [ :edit, :update ], controller: "users"
-  resources :users, only: [ :show ] do
-    member do
-      get :rated_movies
+    resources :users, only: [ :show ] do
+      member do
+        get :rated_movies
+      end
     end
-  end
 
   resources :user_movies, only: [ :create ] do
     patch :update_rating, on: :collection
   end
   get "trending", to: "movies#index"
+  get "on-the-air", to: "pages#on_the_air"
+  get "about", to: "pages#about"
 end

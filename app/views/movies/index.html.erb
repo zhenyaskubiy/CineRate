@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center mb-16 text-center">
     <div class="mb-8">
       <h2 class="text-4xl font-['Anton'] uppercase tracking-tighter text-black leading-none">
-        Popular <span class="text-red-600">Now</span>
+        Popular <span class="text-black">Movies</span> <span class="text-red-600">Now</span>
       </h2>
       <p class="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-4">
         Here are the most popular movies right now
@@ -13,7 +13,7 @@
     <% if @movies.present? %>
       <% @movies.each do |movie| %>
         <div class="flex-none w-[220px] snap-start">
-          <div class="group bg-black rounded-4xl overflow-hidden shadow-xl transition-all hover:scale-95 duration-300">
+          <div class="group bg-black rounded-xl overflow-hidden shadow-xl transition-all hover:scale-95 duration-300">
             
             <div class="aspect-2/3 relative bg-gray-900">
               <% if movie['poster_path'] %>
@@ -22,13 +22,13 @@
                      alt="<%= movie['title'] || movie['name'] %>">
               <% end %>
               
-              <div class="absolute top-3 left-3 bg-black/50 backdrop-blur-md px-2 py-1 rounded-lg">
-                <span class="text-white text-[10px] font-black">★ <%= movie['vote_average']&.round(1) %></span>
-              </div>
+              <div class="absolute top-3 left-3 bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-sm">
+                      <span class="not-only:text-black font-black text-[11px]">★ <%= movie['vote_average']&.round(1) %></span>
+                    </div>
             </div>
 
-            <div class="p-4 bg-black">
-              <h3 class="text-white font-black text-sm uppercase tracking-tight truncate mb-1">
+            <div class="p-4 bg-white">
+              <h3 class="text-black font-black text-sm uppercase tracking-tight truncate mb-1">
                 <%= movie['title'] || movie['name'] %>
               </h3>
               

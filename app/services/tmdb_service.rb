@@ -28,6 +28,10 @@ class TmdbService
     get_request("/discover/tv?page=#{page}")["results"] || []
   end
 
+  def self.on_the_air(page = 1)
+    get_request("/tv/on_the_air?page=#{page}")["results"] || []
+  end
+
   def self.fetch_details(type, id)
     endpoint = "/#{type}/#{id}?append_to_response=credits,videos"
     result = get_request(endpoint)

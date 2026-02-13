@@ -1,15 +1,12 @@
 class PagesController < ApplicationController
   attr_reader :titles
 
-  def home
-  end
-
   def about
   end
 
-  def trending
-  end
-
-  def media
+  def on_the_air
+    @page = (params[:page] || 1).to_i
+    @titles = TmdbService.on_the_air(@page)
+    @media_type = "tv"
   end
 end

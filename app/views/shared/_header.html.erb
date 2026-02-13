@@ -1,4 +1,4 @@
-<header class="bg-black text-white">
+<header class="bg-black text-white">  
   <div class="max-w-7xl mx-auto px-6 py-4 space-y-4">
     <div class="grid grid-cols-3 items-center">
       <div></div>
@@ -61,7 +61,7 @@
               Edit Profile
             <% end %>
 
-            <%= link_to "#", class: "flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-600 hover:bg-gray-50 hover:text-red-600 transition-colors" do %>
+            <%= link_to rated_movies_user_path(current_user), class: "flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-600 hover:bg-gray-50 hover:text-red-600 transition-colors" do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
               </svg>
@@ -99,8 +99,8 @@
   <%= link_to "TRENDING", trending_path,
     class: "nav-link-animated transition whitespace-nowrap uppercase #{current_page?(trending_path) ? 'text-red-500' : 'text-white hover:text-white'}" %>
 
-  <%= link_to "TOP 10", "#",
-    class: "nav-link-animated transition whitespace-nowrap uppercase text-white hover:text-white" %>
+  <%= link_to "ON THE AIR", on_the_air_path, 
+    class: "nav-link-animated transition whitespace-nowrap uppercase #{current_page?(on_the_air_path) ? 'text-red-500' : 'text-white hover:text-white'}" %>
 
   <%= link_to "ABOUT", about_path,
     class: "nav-link-animated transition whitespace-nowrap uppercase #{current_page?(about_path) ? 'text-red-500' : 'text-white hover:text-white'}" %>
