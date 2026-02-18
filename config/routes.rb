@@ -20,4 +20,8 @@ Rails.application.routes.draw do
   get "trending", to: "movies#index"
   get "on-the-air", to: "pages#on_the_air"
   get "about", to: "pages#about"
+
+  namespace :api do
+    resources :user_movies
+  end
 end
